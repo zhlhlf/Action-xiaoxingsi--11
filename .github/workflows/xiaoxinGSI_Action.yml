@@ -1,0 +1,100 @@
+name: xiaoxinGSI_Action
+
+on:
+  watch:
+    types: [started]
+#  push:
+#    branches: [ master ]
+#  pull_request:
+#    branches: [ master ]
+   
+env:
+  ROM_URL: https://ip4194961019.mobgslb.tbcache.com/Firmware/Flyme/meizu17/9.0.0.1/cn/20210823164946/8fc1e375/update.zip?ali_redirect_domain=firmware.meizu.com&ali_redirect_ex_ftag=7ca213f6cc63a4ff2acade697c962c466096f3c490604e87&ali_redirect_ex_tmining_ts=1630199563&ali_redirect_ex_tmining_expire=3600&ali_redirect_ex_hot=100
+  rom_name: update.zip
+  rom_name_1: update.zip
+  make_type: AB     # A    AB
+  OS_TYPE: Flyme  #  Flyme  GenericI   MIUI   OxygenOS  Pixel Color OS
+  REPACK_NAME: GSI_by-jczhl
+  TZ: Asia/Shanghai
+  wetransfer: true
+  release: false
+  pack7z: false
+  zip: true
+
+
+
+jobs:
+    build:
+      runs-on: ubuntu-20.04
+
+      steps:
+        - name: 获取本仓库源码
+          uses: actions/checkout@main
+  
+        - name: 清理环境
+          run: |
+            docker rmi `docker images -q`
+  
+        - name: 获取SGSI工具
+          run: |
+            git clone --recurse-submodules https://github.com/xiaoxindada/SGSI-build-tool.git -b 11 $GITHUB_WORKSPACE/Tool-SGSI-build
+            curl -sL https://git.io/file-transfer | sh
+
+        - name: 配置环境
+          run: |
+            mkdir zhlhlf
+            sudo chmod 777 -R $GITHUB_WORKSPACE/Tool-SGSI-build
+            sudo bash $GITHUB_WORKSPACE/Tool-SGSI-build/setup.sh
+  
+        - name: 下载ROM
+          run: |
+            cd $GITHUB_WORKSPACE/Tool-SGSI-build
+            mkdir ./tmp
+            aria2c -x16 -j5 -U "Mozilla/5.0" -d tmp -o $rom_name $ROM_URL || wget -U "Mozilla/5.0" $ROM_URL -O tmp/$rom_name
+            echo "zip_file: $(ls "$GITHUB_WORKSPACE/Tool-SGSI-build/tmp/")"
+            
+        - name: 解包ozip
+          if: env.OS_TYPE == 'Color OS'    
+          run: |            
+            python oppo_ozip/ozipdecrypt.py ../tmp/$rom_name
+  
+        - name: 制作GSI
+          run: |
+            sudo bash $GITHUB_WORKSPACE/Tool-SGSI-build/make.sh $make_type << EOF
+            $rom_name_1
+            y
+            y
+             
+        - name: 7z打包
+          if: env.pack7z == 'true'    
+          run: |
+             7z a -r $OS_TYPE-$REPACK_NAME-$make_type.7z Tool-SGSI-build/SGSI/*
+            
+        - name: zip 打包
+          if: env.zip == 'true'
+          run: |
+            zip -r $OS_TYPE-$REPACK_NAME-$make_type.zip Tool-SGSI-build/SGSI/*
+            if [[ $(du -sb $OS_TYPE-$REPACK_NAME-$make_type.zip | awk '{print $1}') -gt 2097152000 ]];then
+                  echo -e "split packaging..."
+                  tar -cpzf - $OS_TYPE-$REPACK_NAME-$make_type.zip | split -d -b 1024m - $OS_TYPE-$REPACK_NAME-$make_type.zip
+              fi
+
+        - name: 移动生成包至zhlhlf目录
+          run: |
+           mv $OS_TYPE-$REPACK_NAME-$make_type.* zhlhlf
+                              
+        - name: 上传zhlhlf目录所有文件至WeTransfer
+          if: env.wetransfer == 'true'      
+          run: |
+             sudo ./transfer wet zhlhlf/*
+
+        - name: 上传zhlhlf目录所有文件至 release
+          if: env.release == 'true'      
+          uses: ncipollo/release-action@v1.8.6
+          with:
+             artifacts: zhlhlf/*
+             name: SGSI-ab-Android
+             tag: SGSI-ab-Android10-${{ github.run_number }}
+             bodyFile: "${{ github.workspace }}/Tool-SGSI-build/SGSI/build_info.txt"
+             token: ${{ secrets.GITHUB_TOKEN }}
+
