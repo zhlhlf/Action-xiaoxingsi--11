@@ -1,5 +1,8 @@
 基于Github Actions制作的自动跑GSI的脚本
 更新日期：2021年8月14日        核心文件：xiaoxindada 11 工具
+
+https://github.com/xiaoxindada/SGSI-build-tool
+
 by jczhl
 ```
 cat zhlhlf/* > SGSI.zip
