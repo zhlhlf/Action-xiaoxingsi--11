@@ -9,7 +9,7 @@ on:
 #    branches: [ master ]
    
 env:
-  ROM_URL: https://ip4194961019.mobgslb.tbcache.com/Firmware/Flyme/meizu17/9.0.0.1/cn/20210823164946/8fc1e375/update.zip?ali_redirect_domain=firmware.meizu.com&ali_redirect_ex_ftag=7ca213f6cc63a4ff2acade697c962c466096f3c490604e87&ali_redirect_ex_tmining_ts=1630199563&ali_redirect_ex_tmining_expire=3600&ali_redirect_ex_hot=100
+  ROM_URL: https://aab4to54oxt7uk4xw5okamtekessa888.node.ppio.cloud:35672/fsa167af8c.a.bdydns.com/1435501072/Firmware/Flyme/meizu18/9.2.5.2/cn/20211215152209/6c4a4c4c/update.zip?f_ver=v1&max_age=7776000&r=Djg2AQNuQkkcPDQ5BCU2IUghJxgKIUMFFThpEho2KTMHPideNjgUCx96KzEaPjF1XmN7X0J6WEhIeiU6XHZ0dld9cEBFZVhUSGV%2Fe0UncCVSL3YSXyEdAhshI3oJLTQJPCcfEzADVxUlIzoQICp1&ppiouid=62341ed6e8d3940001d248e0dcaac809
   rom_name: update.zip
   rom_name_1: update.zip
   make_type: AB     # A    AB
