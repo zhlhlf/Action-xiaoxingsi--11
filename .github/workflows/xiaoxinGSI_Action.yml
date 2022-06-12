@@ -9,11 +9,11 @@ on:
 #    branches: [ master ]
    
 env:
-  ROM_URL: https://aab4to54oxt7uk4xefa3smznlxemg888.node.ppio.cloud:35672/fsa167af8c.a.bdydns.com/1435501072/Firmware/Flyme/meizu17/9.2.0.2/cn/20220114164709/f9c0f11f/update.zip?f_ver=v1&max_age=7776000&r=LREsSQNIaVtfHx8%2FDTA0MWsIPVAKB2gXVhtCFBMjKyMkFz0WNh4%2FGVxZADcTKzNlckphF0JcdloLWQ48VWN2ZndVaQhEQ3BADkZUfRxoJWQjVGlfXwc2EFgCCHwAODYqFT1XExYoRVYGCDwZNShl&ppiouid=6234595ae8d3940001bd3b43dcaac882
+  ROM_URL: https://bigota.d.miui.com/22.3.2/miui_TUCANA_22.3.2_e735556b82_11.0.zip
   rom_name: update.zip
   rom_name_1: update.zip
   make_type: AB     # A    AB
-  OS_TYPE: Flyme  #  Flyme  GenericI   MIUI   OxygenOS  Pixel Color OS
+  OS_TYPE: MIUI  #  Flyme  GenericI   MIUI   OxygenOS  Pixel Color OS
   REPACK_NAME: GSI_by-jczhl
   TZ: Asia/Shanghai
   wetransfer: true
